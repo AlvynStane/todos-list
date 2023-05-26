@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todos_list/darktheme.dart';
@@ -64,6 +65,30 @@ class _MainPageState extends State<MainPage> {
     setState(() {
       _selectedButtomIndex = index;
     });
+  }
+
+  Widget _counter(int num) {
+    return Container(
+      width: 20,
+      height: 20,
+      padding: EdgeInsets.all(1),
+      decoration: BoxDecoration(
+          color: Colors.red, borderRadius: BorderRadius.circular(10)),
+      child: Center(
+        child: Text(
+          num.toString(),
+          style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  int doneNumber(String item) {
+    List<Todo> filtered;
+    filtered = _originalTodos
+        .where((tile) => tile.category.contains(item) && tile.isChecked != true)
+        .toList();
+    return filtered.length.toInt();
   }
 
   @override
@@ -182,6 +207,58 @@ class _MainPageState extends State<MainPage> {
         currentIndex: _selectedButtomIndex,
         selectedItemColor: Colors.green,
         onTap: _onItemTapped,
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [
+            DrawerHeader(
+                padding: EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                    color: themeProvider.darkTheme == false
+                        ? Colors.green
+                        : Colors.grey),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: const [
+                    Text('TODOS APP',
+                        style: TextStyle(
+                            fontSize: 25, fontWeight: FontWeight.bold)),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text('By: Anonymous')
+                  ],
+                )),
+            ListTile(
+                title: Text('Work'),
+                trailing: Visibility(
+                    visible: doneNumber('Work') != 0,
+                    child: _counter(doneNumber('Work')))),
+            ListTile(
+                title: Text('Routine'),
+                trailing: Visibility(
+                    visible: doneNumber('Routine') != 0,
+                    child: _counter(doneNumber('Routine')))),
+            ListTile(
+                title: Text('Others'),
+                trailing: Visibility(
+                    visible: doneNumber('Others') != 0,
+                    child: _counter(doneNumber('Others')))),
+            Divider(),
+            ListTile(
+              title: Text('Dark Mode'),
+              trailing: Switch(
+                  value: themeProvider.darkTheme,
+                  onChanged: (value) {
+                    setState(() {
+                      themeProvider.darkMode = value;
+                    });
+                  }),
+            )
+          ],
+        ),
       ),
     );
   }
