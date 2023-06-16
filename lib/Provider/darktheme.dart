@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class DarkThemeProvider with ChangeNotifier {
-  var light =
-      ThemeData(brightness: Brightness.light, primarySwatch: Colors.green);
+  var light = ThemeData(
+    brightness: Brightness.light, 
+    primarySwatch: Colors.green,
+  );
 
   var dark = ThemeData(
     brightness: Brightness.dark,
