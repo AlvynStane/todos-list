@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todos_list/Provider/darktheme.dart';
+import 'package:todos_list/Provider/todos_provider.dart';
 import 'package:todos_list/mainpage.dart';
 
 void main() {
-  runApp(ChangeNotifierProvider(
-    create: (_) => DarkThemeProvider(),
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => DarkThemeProvider()),
+      ChangeNotifierProvider(create: (_) => TodoProvider()),
+    ],
     child: const MyApp(),
   ));
 }
@@ -21,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: themeProvider.darkTheme == true
           ? themeProvider.dark
           : themeProvider.light,
-      home: const MainPage(title: 'Todos'),
+      home: const MainPage(),
       debugShowCheckedModeBanner: false,
     );
   }

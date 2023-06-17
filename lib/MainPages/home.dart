@@ -1,12 +1,7 @@
+import 'package:provider/provider.dart';
+import 'package:todos_list/Provider/todos_provider.dart';
 import 'package:todos_list/Second/todospage.dart';
 import 'package:flutter/material.dart';
-
-void onSaveTodo(String title, String description, String startDate,
-    String endDate, String category, BuildContext context) {
-  final homePageState = context.findAncestorStateOfType<_HomePagesState>();
-  homePageState?.addTodo(title, description, startDate, endDate, category);
-  Navigator.pop(context);
-}
 
 class HomePages extends StatefulWidget {
   const HomePages({super.key});
@@ -16,52 +11,16 @@ class HomePages extends StatefulWidget {
 }
 
 class _HomePagesState extends State<HomePages> {
-  String? _value;
-  final List<Todo> _originalTodos = [];
-  List<Todo> _filteredTodos = [];
-
-  final List<Stuff> _stuff = [
-    Stuff('Work', Colors.red),
-    Stuff('Routine', Colors.amber),
-    Stuff('Others', Colors.blue)
-  ];
-
-  void addTodo(String title, String description, String startDate,
-      String endDate, String category) {
-    setState(() {
-      _originalTodos.add(Todo(
-        title: title,
-        description: description,
-        startDate: startDate,
-        endDate: endDate,
-        category: category,
-        isChecked: false,
-      ));
-      _filteredTodos = _originalTodos;
-    });
-  }
-
-  void _selectedChip(String? value) {
-    List<Todo> filter;
-    if (value != null) {
-      filter = _originalTodos
-          .where((tile) => tile.category.contains(value))
-          .toList();
-    } else {
-      filter = _originalTodos;
-    }
-    setState(() {
-      _filteredTodos = filter;
-      _value = value;
-    });
+  void onSaveTodo(String title, String description, String startDate,
+      String endDate, String category, BuildContext context) {
+    final todosProvider = Provider.of<TodoProvider>(context);
+    todosProvider.addTodo(title, description, startDate, endDate, category);
+    Navigator.pop(context);
   }
 
   @override
   Widget build(BuildContext context) {
-    List<Todo> finishedTodos =
-        _filteredTodos.where((check) => check.isChecked).toList();
-    List<Todo> unfinishedTodos =
-        _filteredTodos.where((check) => !check.isChecked).toList();
+    final todosProvider = Provider.of<TodoProvider>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -70,23 +29,23 @@ class _HomePagesState extends State<HomePages> {
           child: Wrap(
             spacing: 5.0,
             children: List<Widget>.generate(
-              _stuff.length,
+              todosProvider.stuff.length,
               (int index) {
+                var item = todosProvider.stuff;
                 return ChoiceChip(
-                  label: Text(_stuff[index].label),
-                  selectedColor: _stuff[index].color,
+                  label: Text(item[index].label),
+                  selectedColor: item[index].color,
                   backgroundColor: Colors.white70,
-                  side: BorderSide(color: _stuff[index].color, width: 2),
-                  selected: _value == _stuff[index].label,
+                  side: BorderSide(color: item[index].color, width: 2),
+                  selected: todosProvider.value == item[index].label,
                   onSelected: (bool value) {
                     setState(() {
-                      _value = value ? _stuff[index].label : null;
+                      todosProvider.value = value ? item[index].label : null;
                     });
-
                     if (value) {
-                      _selectedChip(_stuff[index].label);
+                      todosProvider.selectChip(item[index].label);
                     } else {
-                      _selectedChip(null);
+                      todosProvider.selectChip(null);
                     }
                   },
                 );
@@ -103,23 +62,18 @@ class _HomePagesState extends State<HomePages> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: const [
-                      Text(
-                        'Unfinished',
-                        style: TextStyle(color: Colors.black),
-                      ),
-                      Divider(
-                        color: Colors.black87,
-                      ),
+                      Text('Unfinished'),
+                      Divider(),
                     ],
                   ),
                 ),
-                if (unfinishedTodos.isNotEmpty)
+                if (todosProvider.unfinishedTodos.isNotEmpty)
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: unfinishedTodos.length,
+                    itemCount: todosProvider.unfinishedTodos.length,
                     itemBuilder: (context, index) {
-                      final todo = unfinishedTodos[index];
+                      final todo = todosProvider.unfinishedTodos[index];
                       return Card(
                         color: Colors.white70,
                         shape: RoundedRectangleBorder(
@@ -127,12 +81,12 @@ class _HomePagesState extends State<HomePages> {
                         child: ExpansionTile(
                           leading: Checkbox(
                             value: todo.isChecked,
-                            activeColor: _stuff
+                            activeColor: todosProvider.stuff
                                 .firstWhere(
                                     (element) => element.label == todo.category)
                                 .color,
                             side: BorderSide(
-                                color: _stuff
+                                color: todosProvider.stuff
                                     .firstWhere((element) =>
                                         element.label == todo.category)
                                     .color,
@@ -169,21 +123,18 @@ class _HomePagesState extends State<HomePages> {
                     children: const [
                       Text(
                         'Finished',
-                        style: TextStyle(color: Colors.black),
                       ),
-                      Divider(
-                        color: Colors.black87,
-                      ),
+                      Divider(),
                     ],
                   ),
                 ),
-                if (finishedTodos.isNotEmpty)
+                if (todosProvider.finishedTodos.isNotEmpty)
                   ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: finishedTodos.length,
+                    itemCount: todosProvider.finishedTodos.length,
                     itemBuilder: (context, index) {
-                      final todo = finishedTodos[index];
+                      final todo = todosProvider.finishedTodos[index];
                       return Card(
                         color: Colors.white70,
                         shape: RoundedRectangleBorder(
@@ -191,12 +142,12 @@ class _HomePagesState extends State<HomePages> {
                         child: ExpansionTile(
                           leading: Checkbox(
                             value: todo.isChecked,
-                            activeColor: _stuff
+                            activeColor: todosProvider.stuff
                                 .firstWhere(
                                     (element) => element.label == todo.category)
                                 .color,
                             side: BorderSide(
-                                color: _stuff
+                                color: todosProvider.stuff
                                     .firstWhere((element) =>
                                         element.label == todo.category)
                                     .color,
