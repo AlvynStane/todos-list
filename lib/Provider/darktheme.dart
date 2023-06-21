@@ -3,13 +3,19 @@ import 'package:flutter/foundation.dart';
 
 class DarkThemeProvider with ChangeNotifier {
   final ThemeData light = ThemeData(
-    brightness: Brightness.light, 
+    brightness: Brightness.light,
     primarySwatch: Colors.green,
+    sliderTheme: SliderThemeData(
+      disabledActiveTrackColor: Colors.green,
+    ),
   );
 
   final ThemeData dark = ThemeData(
     brightness: Brightness.dark,
     primarySwatch: Colors.grey,
+    sliderTheme: SliderThemeData(
+      disabledActiveTrackColor: Colors.greenAccent,
+    ),
   );
 
   bool _darkTheme = false;
