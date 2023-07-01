@@ -18,6 +18,15 @@ class Todo {
   });
 }
 
+class Event {
+  final String title;
+  final String subtitle;
+  final String startDate;
+  final String endDate;
+
+  Event(this.title, this.subtitle, this.startDate, this.endDate);
+}
+
 class Stuff {
   String label;
   Color color;
@@ -28,6 +37,7 @@ class Stuff {
 class TodoProvider with ChangeNotifier {
   final List<Todo> _originalTodos = [];
   List<Todo> _filteredTodos = [];
+  final List<Event> _eventList = [];
   String? value;
 
   final List<Stuff> _stuff = [
@@ -37,6 +47,7 @@ class TodoProvider with ChangeNotifier {
   ];
 
   List<Stuff> get stuff => _stuff;
+  List<Event> get eventList => _eventList;
   List<Todo> get originalTodos => _originalTodos;
   List<Todo> get filteredTodos => _filteredTodos;
   List<Todo> get finishedTodos =>
@@ -55,6 +66,12 @@ class TodoProvider with ChangeNotifier {
       isChecked: false,
     ));
     _filteredTodos = _originalTodos;
+    notifyListeners();
+  }
+
+  void addEvent(
+      String title, String subtitle, String startDate, String endDate) {
+    _eventList.add(Event(title, subtitle, startDate, endDate));
     notifyListeners();
   }
 

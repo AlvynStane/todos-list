@@ -59,15 +59,18 @@ class _MainPageState extends State<MainPage> {
             ProfilePage(),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: ((context) =>
-                        Todos(onSaveTodo: todosProvider.addTodo))));
-          },
-          child: const Icon(Icons.add),
+        floatingActionButton: Visibility(
+          visible: _selectedBottomIndex != 1,
+          child: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: ((context) =>
+                          Todos(onSaveTodo: todosProvider.addTodo))));
+            },
+            child: const Icon(Icons.add),
+          ),
         ),
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[
@@ -102,7 +105,6 @@ class _MainPageState extends State<MainPage> {
                 ),
               );
             }).toList();
-
             return Drawer(
               child: ListView(
                 padding: EdgeInsets.zero,
