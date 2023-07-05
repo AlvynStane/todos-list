@@ -39,6 +39,7 @@ class TodoProvider with ChangeNotifier {
   List<Todo> _filteredTodos = [];
   final List<Event> _eventList = [];
   String? value;
+  ImageProvider? profile_picture;
 
   final List<Stuff> _stuff = [
     Stuff('Work', Colors.red),
@@ -54,6 +55,7 @@ class TodoProvider with ChangeNotifier {
       _filteredTodos.where((check) => check.isChecked).toList();
   List<Todo> get unfinishedTodos =>
       _filteredTodos.where((check) => !check.isChecked).toList();
+  get getPicture => profile_picture;
 
   void addTodo(String title, String description, String startDate,
       String endDate, String category) {
@@ -116,5 +118,10 @@ class TodoProvider with ChangeNotifier {
         ),
       ),
     );
+  }
+
+  set setPicture(val) {
+    profile_picture = val;
+    notifyListeners();
   }
 }

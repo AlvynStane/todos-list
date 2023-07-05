@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import 'package:todos_list/Provider/darktheme.dart';
 
 class Todos extends StatefulWidget {
   const Todos({Key? key, required this.onSaveTodo}) : super(key: key);
@@ -204,7 +206,10 @@ class _TodosState extends State<Todos> {
                         padding: const EdgeInsets.all(10.0),
                         child: OutlinedButton(
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: Colors.green,
+                            foregroundColor:
+                                context.watch<DarkThemeProvider>().darkTheme
+                                    ? Colors.greenAccent
+                                    : Colors.green,
                           ),
                           onPressed: () {
                             Navigator.pop(context);
@@ -262,29 +267,59 @@ class _TodosState extends State<Todos> {
                                                   Navigator.of(context).pop();
                                                 },
                                                 style: ElevatedButton.styleFrom(
-                                                    backgroundColor:
-                                                        Colors.green,
+                                                    backgroundColor: context
+                                                            .watch<
+                                                                DarkThemeProvider>()
+                                                            .darkTheme
+                                                        ? Colors.greenAccent
+                                                        : Colors.green,
                                                     padding: const EdgeInsets
                                                             .symmetric(
                                                         vertical: 15,
                                                         horizontal: 35)),
-                                                child: const Text("OK"),
+                                                child: Text(
+                                                  "OK",
+                                                  style: TextStyle(
+                                                    color: context
+                                                            .watch<
+                                                                DarkThemeProvider>()
+                                                            .darkTheme
+                                                        ? Colors.black
+                                                        : Colors.white,
+                                                  ),
+                                                ),
                                               )
                                             ],
                                           ),
                                         ),
                                       ),
-                                      const Positioned(
+                                      Positioned(
                                           top: -45,
                                           child: CircleAvatar(
                                             radius: 40,
-                                            backgroundColor: Colors.white,
+                                            backgroundColor: context
+                                                    .watch<DarkThemeProvider>()
+                                                    .darkTheme
+                                                ? Colors.black26
+                                                : Colors.white,
                                             child: CircleAvatar(
-                                              backgroundColor: Colors.green,
+                                              backgroundColor: context
+                                                      .watch<
+                                                          DarkThemeProvider>()
+                                                      .darkTheme
+                                                  ? Colors.greenAccent
+                                                  : Colors.green,
                                               radius: 36,
-                                              child: Icon(Icons.check,
-                                                  size: 40,
-                                                  color: Colors.white),
+                                              child: Icon(
+                                                Icons.check,
+                                                size: 40,
+                                                color: context
+                                                        .watch<
+                                                            DarkThemeProvider>()
+                                                        .darkTheme
+                                                    ? Colors.black
+                                                    : Colors.white,
+                                              ),
                                             ),
                                           )),
                                     ],

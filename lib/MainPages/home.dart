@@ -35,7 +35,6 @@ class _HomePagesState extends State<HomePages> {
                 return ChoiceChip(
                   label: Text(item[index].label),
                   selectedColor: item[index].color,
-                  backgroundColor: Colors.white70,
                   side: BorderSide(color: item[index].color, width: 2),
                   selected: todosProvider.value == item[index].label,
                   onSelected: (bool value) {
@@ -75,7 +74,6 @@ class _HomePagesState extends State<HomePages> {
                     itemBuilder: (context, index) {
                       final todo = todosProvider.unfinishedTodos[index];
                       return Card(
-                        color: Colors.white70,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                         child: ExpansionTile(
@@ -136,7 +134,6 @@ class _HomePagesState extends State<HomePages> {
                     itemBuilder: (context, index) {
                       final todo = todosProvider.finishedTodos[index];
                       return Card(
-                        color: Colors.white70,
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10)),
                         child: ExpansionTile(

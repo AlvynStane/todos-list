@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:todos_list/Provider/darktheme.dart';
 import 'package:todos_list/Provider/todos_provider.dart';
-import 'package:todos_list/mainpage.dart';
+import 'package:todos_list/splash_screen.dart';
 
 void main() {
   runApp(MultiProvider(
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       theme: themeProvider.darkTheme == true
           ? themeProvider.dark
           : themeProvider.light,
-      home: const MainPage(),
+      home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
   }

@@ -33,18 +33,6 @@ class _MainPageState extends State<MainPage> {
         appBar: AppBar(
           title: Text(title[_selectedBottomIndex]),
           centerTitle: true,
-          actions: <Widget>[
-            Icon(themeProvider.darkTheme == false
-                ? Icons.wb_sunny
-                : Icons.nightlight_round),
-            Switch(
-                value: themeProvider.darkTheme,
-                onChanged: (value) {
-                  setState(() {
-                    themeProvider.darkMode = value;
-                  });
-                })
-          ],
         ),
         body: PageView(
           controller: _pageController,
@@ -80,7 +68,6 @@ class _MainPageState extends State<MainPage> {
             BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
           ],
           currentIndex: _selectedBottomIndex,
-          selectedItemColor: Colors.green,
           onTap: (int index) {
             setState(() {
               _selectedBottomIndex = index;
